@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
 import { TbLogout } from "react-icons/tb";
 import { BiSolidCategory } from "react-icons/bi"
-import string from '../../String';
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -37,23 +36,39 @@ const Navbar = () => {
         </div>
 
         {/* Center Section */}
-        {currentUser ? (<>
-        <div className="hidden md:flex space-x-4">
-          <Link to='/dashboard' className="hover:text-green-500 text-green-800 text-xl font-medium">Dashboard</Link>
-          <Link to='/transaction' className="hover:text-green-500 text-green-800 text-xl font-medium">Transações</Link>
-        </div></>) : null}
+        {currentUser ? (
+          <>
+            <div className="hidden md:flex space-x-4">
+              <Link
+                to="/dashboard"
+                className="hover:text-green-500 text-green-800 text-xl font-medium"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/transaction"
+                className="hover:text-green-500 text-green-800 text-xl font-medium"
+              >
+                Transações
+              </Link>
+            </div>
+          </>
+        ) : null}
 
         {/* Right Section */}
         <div className="relative flex items-center">
           {currentUser ? (
             <>
-              <button onClick={toggleDropdown} className="flex items-center relative">
+              <button
+                onClick={toggleDropdown}
+                className="flex items-center relative"
+              >
                 <span className="text-green-800 text-xl mx-2 font-medium hidden sm:block">
                   {currentUser.user.username}
                 </span>
                 <img
-                  className="rounded-full h-7 w-7 object-cover sm:h-10 sm:w-10"
-                  src={`${string}${currentUser.user.avatar}`}
+                  className="rounded-full h-6  w-7 "
+                  src="../../../public/user.png"
                   alt="profile"
                 />
               </button>
@@ -80,7 +95,9 @@ const Navbar = () => {
                       onClick={() => setDropdownOpen(false)}
                     >
                       <BiSolidCategory className="text-2xl flex-grow" />
-                      <span className="mx-auto flex-none w-3/4">Categorias</span>
+                      <span className="mx-auto flex-none w-3/4">
+                        Categorias
+                      </span>
                     </Link>
                     <Link
                       to="/signout"
@@ -112,7 +129,7 @@ const Navbar = () => {
         </div>
       </div>
     </header>
-  );
+  )
 };
 
 export default Navbar;

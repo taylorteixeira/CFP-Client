@@ -15,7 +15,7 @@ const ChatModal = ({ isOpen, onClose, isLoggedIn }) => {
       setLoading(true)
 
       try {
-        const response = await axios.post(`${string}/chat`, {
+        const response = await axios.post(`${string}/chat/send`, {
           message,
         })
 

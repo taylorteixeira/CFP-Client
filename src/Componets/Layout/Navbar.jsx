@@ -38,7 +38,7 @@ const Navbar = () => {
         {currentUser ? null : (
           <>
             <div className="flex flex-col items-center">
-              <h2 className="text-2xl font-bold text-green-800">CFP</h2>
+              <h2 className="text-2xl font-bold text-green-800">Controle de Financias</h2>
               <span className="text-gray-600 text-xs mt-1">
                 <a
                   href="https://taylor-teixeira.vercel.app/"

@@ -34,7 +34,23 @@ const Navbar = () => {
     >
       <div className="flex justify-between items-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Left Section */}
-        <div className="flex items-center flex-shrink-0"></div>
+        <div></div>
+        {currentUser ? null : (
+          <>
+            <div className="flex flex-col items-center">
+              <h2 className="text-2xl font-bold text-green-800">CFP</h2>
+              <span className="text-gray-600 text-xs mt-1">
+                <a
+                  href="https://taylor-teixeira.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  powered by T&T
+                </a>
+              </span>
+            </div>
+          </>
+        )}
 
         {/* Center Section */}
         {currentUser ? (

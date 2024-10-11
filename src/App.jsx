@@ -16,6 +16,7 @@ import Category from "./Componets/Private/Category"
 import Sidebar from "./Componets/Layout/Sidebar" // Importando Sidebar
 import { useState } from "react"
 import ChatModal from "./Componets/Layout/ChatModal" // Importar o ChatModal
+import { Analytics } from "@vercel/analytics/react"
 
 const App = () => {
   const { currentUser } = useSelector((state) => state.user)
@@ -28,6 +29,7 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
+        <Analytics /> 
         <div className="app-container min-h-screen flex flex-col">
           <Navbar />
 

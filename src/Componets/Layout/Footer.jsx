@@ -6,7 +6,9 @@ export const Footer = () => {
       <div className="container mx-auto flex flex-col items-center justify-between md:flex-row">
         <div className="mb-4 md:mb-0">
           <div className="flex flex-col items-center">
-            <h2 className="text-2xl font-bold text-green-800">CFP</h2>
+            <Link to="/">
+              <h2 className="text-2xl font-bold text-green-800">CFP</h2>
+            </Link>
             <span className="text-gray-600 text-xs mt-1">
               <a
                 href="https://taylor-teixeira.vercel.app/"

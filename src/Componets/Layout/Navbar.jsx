@@ -3,7 +3,6 @@ import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { CgProfile } from "react-icons/cg"
 import { PiUserList } from "react-icons/pi"
-
 import { TbLogout } from "react-icons/tb"
 
 const Navbar = () => {
@@ -38,7 +37,11 @@ const Navbar = () => {
         {currentUser ? null : (
           <>
             <div className="flex flex-col items-center">
-              <h2 className="text-2xl font-bold text-green-800">Controle de Financias</h2>
+              <Link to="/">
+                <h2 className="text-2xl font-bold text-green-800">
+                  Controle de Finanças
+                </h2>
+              </Link>
               <span className="text-gray-600 text-xs mt-1">
                 <a
                   href="https://taylor-teixeira.vercel.app/"
@@ -60,7 +63,7 @@ const Navbar = () => {
                 to="/dashboard"
                 className="text-green-800 text-xl font-medium"
               >
-                Bem vindo ao Controle de finacias,
+                Bem-vindo ao Controle de Finanças,
               </Link>
             </div>
           </>

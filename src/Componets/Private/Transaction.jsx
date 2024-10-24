@@ -1,256 +1,278 @@
-import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import ReactSlider from 'react-slider';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import string from '../../String';
-import toast from 'react-hot-toast';
+import { useState, useEffect, useRef } from "react"
+import axios from "axios"
+import ReactSlider from "react-slider"
+import { FaEdit, FaTrash } from "react-icons/fa"
+import string from "../../String"
+import toast from "react-hot-toast"
 
 const Transaction = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [categoriesTransaction, setCategoriesTransaction] = useState([]);
-  const [showAddTransactionForm, setShowAddTransactionForm] = useState(false);
-  const [showEditTransactionForm, setShowEditTransactionForm] = useState(false);
-  const [editTransactionData, setEditTransactionData] = useState(null);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [deleteCategoryId, setDeleteTransactionId] = useState(null);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [transactions, setTransactions] = useState([])
+  const [categories, setCategories] = useState([])
+  const [categoriesTransaction, setCategoriesTransaction] = useState([])
+  const [showAddTransactionForm, setShowAddTransactionForm] = useState(false)
+  const [showEditTransactionForm, setShowEditTransactionForm] = useState(false)
+  const [editTransactionData, setEditTransactionData] = useState(null)
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+  const [deleteCategoryId, setDeleteTransactionId] = useState(null)
+  const [filteredTransactions, setFilteredTransactions] = useState([])
 
-  const [filterCategory, setFilterCategory] = useState('');
-  const [filterText, setFilterText] = useState('');
-  const [amountRange, setAmountRange] = useState([]);
-  const [min, setMin] = useState(null);
-  const [max, setMax] = useState(null);
+  const [filterCategory, setFilterCategory] = useState("")
+  const [filterText, setFilterText] = useState("")
+  const [amountRange, setAmountRange] = useState([])
+  const [min, setMin] = useState(null)
+  const [max, setMax] = useState(null)
   const [formData, setFormData] = useState({
-    type: '',
-    category: '',
-    date: new Date().toISOString().split('T')[0], // Today's date
-    note: '',
-    amount: '',
-    currency: 'BRL', // Default currency
-    recurrence: 'never', // Default recurrence
+    type: "",
+    category: "",
+    date: new Date().toISOString().split("T")[0], // Today's date
+    note: "",
+    amount: "",
+    currency: "BRL", // Default currency
+    recurrence: "never", // Default recurrence
     end: null,
     remind: null,
     photo: null,
-    transferTo: '',
-    transferFrom: ''
-  });
+    transferTo: "",
+    transferFrom: "",
+  })
 
-  const formRef = useRef(null);
+  const formRef = useRef(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchCategoriesForTransaction();
-      await fetchTransactions();
-    };
-    fetchData();
-  }, []);
+      await fetchCategoriesForTransaction()
+      await fetchTransactions()
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
     if (formData.type) {
-      fetchCategories();
+      fetchCategories()
     }
-  }, [formData.type]);
+  }, [formData.type])
 
   const fetchTransactions = async () => {
     try {
       const { data } = await axios.get(`${string}/transaction/getTransaction`, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
-      });
-      const adjustedTransactions = data.transactions.map(transaction => ({
+      })
+      const adjustedTransactions = data.transactions.map((transaction) => ({
         ...transaction,
-        amount: transaction.type === 'income' ? transaction.amount : -transaction.amount,
-      }));
-      setTransactions(adjustedTransactions);
-      const amounts = adjustedTransactions.map(t => t.amount);
-      const minAmount = Math.min(...amounts);
-      const maxAmount = Math.max(...amounts);
-      setMin(minAmount);
-      setMax(maxAmount);
-      setAmountRange([minAmount, maxAmount]);
-      setFilteredTransactions(adjustedTransactions); // Initialize filtered transactions
+        amount:
+          transaction.type === "income"
+            ? transaction.amount
+            : -transaction.amount,
+      }))
+      setTransactions(adjustedTransactions)
+      const amounts = adjustedTransactions.map((t) => t.amount)
+      const minAmount = Math.min(...amounts)
+      const maxAmount = Math.max(...amounts)
+      setMin(minAmount)
+      setMax(maxAmount)
+      setAmountRange([minAmount, maxAmount])
+      setFilteredTransactions(adjustedTransactions) // Initialize filtered transactions
     } catch (error) {
-      console.error('Error fetching transactions:', error);
+      console.error("Error fetching transactions:", error)
     }
-  };
-  
+  }
 
   const fetchCategories = async () => {
     try {
       const { data } = await axios.get(`${string}/category/getCategory`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-      });
-      setCategories(data.filter((category) => category.categoryType === formData.type));
+      })
+      setCategories(
+        data.filter((category) => category.categoryType === formData.type)
+      )
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error)
     }
-  };
+  }
 
   const fetchCategoriesForTransaction = async () => {
     try {
       const { data } = await axios.get(`${string}/category/getCategory`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-      });
-      setCategoriesTransaction(data);
+      })
+      setCategoriesTransaction(data)
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error)
     }
-  };
+  }
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   const handlePhotoChange = (e) => {
-    setFormData({ ...formData, photo: e.target.files[0] });
-  };
+    setFormData({ ...formData, photo: e.target.files[0] })
+  }
 
   const handleAddTransaction = async () => {
     try {
-      const { data } = await axios.post(`${string}/transaction/addTransaction`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
-      toast.success(data.message);
-      fetchTransactions();
-      setFormData({});
-      setShowAddTransactionForm(false);
+      const { data } = await axios.post(
+        `${string}/transaction/addTransaction`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      )
+      toast.success(data.message)
+      fetchTransactions()
+      setFormData({})
+      setShowAddTransactionForm(false)
     } catch (error) {
-        toast.error(error.response.data.message);
+      toast.error(error.response.data.message)
     }
-  };
+  }
 
   const handleEditTransaction = async () => {
     try {
-      const { data } = await axios.put(`${string}/transaction/editTransaction/${editTransactionData._id}`,
-            formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-            withCredentials: true,
-      });
-      toast.success(data.message);
-      fetchTransactions();
-      setFormData({});
-      setEditTransactionData(null);
-      setShowEditTransactionForm(false);
+      const { data } = await axios.put(
+        `${string}/transaction/editTransaction/${editTransactionData._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      )
+      toast.success(data.message)
+      fetchTransactions()
+      setFormData({})
+      setEditTransactionData(null)
+      setShowEditTransactionForm(false)
     } catch (error) {
-        toast.error(error.response.data.message);
+      toast.error(error.response.data.message)
     }
-  };
+  }
 
   const handleDeleteTransaction = async () => {
     try {
-      const { data } = await axios.delete(`${string}/transaction/deleteTransaction/${deleteCategoryId}`,
-        { 
-            headers: {
-                "Content-Type": "application/json",
-            },
-            withCredentials: true,
+      const { data } = await axios.delete(
+        `${string}/transaction/deleteTransaction/${deleteCategoryId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         }
-      );
-      toast.success(data.message);
-      fetchTransactions();
-      setShowDeleteConfirmation(false);
-      setDeleteTransactionId(null);
+      )
+      toast.success(data.message)
+      fetchTransactions()
+      setShowDeleteConfirmation(false)
+      setDeleteTransactionId(null)
     } catch (error) {
-        toast.error(error.response.data.message);
+      toast.error(error.response.data.message)
     }
-  };
+  }
 
   const handleClickOutside = (event) => {
     if (formRef.current && !formRef.current.contains(event.target)) {
-      setShowAddTransactionForm(false);
-      setShowEditTransactionForm(false);
-      setShowDeleteConfirmation(false);
-      setFormData({});
+      setShowAddTransactionForm(false)
+      setShowEditTransactionForm(false)
+      setShowDeleteConfirmation(false)
+      setFormData({})
     }
-  };
+  }
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   const handleEditButtonClick = (transaction) => {
     setFormData({
-        type: transaction.type,
-        category: transaction.category,
-        date: transaction.date.split('T')[0],
-        note: transaction.note,
-        amount: transaction.amount,
-        currency: transaction.currency,
-        recurrence: transaction.recurrence,
-        end: transaction.end,
-        remind: transaction.remind,
-        photo: transaction.photo,
-        transferTo: transaction.transferTo,
-        transferFrom: transaction.transferFrom
-    });
-    setEditTransactionData(transaction);
-    setShowEditTransactionForm(true);
-};
+      type: transaction.type,
+      category: transaction.category,
+      date: transaction.date.split("T")[0],
+      note: transaction.note,
+      amount: transaction.amount,
+      currency: transaction.currency,
+      recurrence: transaction.recurrence,
+      end: transaction.end,
+      remind: transaction.remind,
+      photo: transaction.photo,
+      transferTo: transaction.transferTo,
+      transferFrom: transaction.transferFrom,
+    })
+    setEditTransactionData(transaction)
+    setShowEditTransactionForm(true)
+  }
 
-useEffect(() => {
+  useEffect(() => {
     if (editTransactionData) {
     }
-  }, [editTransactionData]);
+  }, [editTransactionData])
 
-  useEffect(() => {
-  }, [formData]);
+  useEffect(() => {}, [formData])
 
   const handleDeleteButtonClick = (transactionId) => {
-    setDeleteTransactionId(transactionId);
-    setShowDeleteConfirmation(true);
-  };
+    setDeleteTransactionId(transactionId)
+    setShowDeleteConfirmation(true)
+  }
 
-  const getCategoryNameById = (id) => {  
-    const category = categoriesTransaction.find((category) => category._id === id);  
-    return category ? category.categoryName : 'Unknown Category';
-  };
+  const getCategoryNameById = (id) => {
+    const category = categoriesTransaction.find(
+      (category) => category._id === id
+    )
+    return category ? category.categoryName : "Dado Importado"
+  }
 
   const handleFilterChange = () => {
-    const filtered = transactions.filter(transaction => {
-      const matchesCategory = filterCategory ? transaction.category === filterCategory : true;
-      const matchesText = filterText ? transaction.note.includes(filterText) : true;
-      const matchesAmount = transaction.amount >= amountRange[0] && transaction.amount <= amountRange[1];
-      return matchesCategory && matchesText && matchesAmount;
-    });
-    setFilteredTransactions(filtered);
-  };
-  
-  
+    const filtered = transactions.filter((transaction) => {
+      const matchesCategory = filterCategory
+        ? transaction.category === filterCategory
+        : true
+      const matchesText = filterText
+        ? transaction.note.includes(filterText)
+        : true
+      const matchesAmount =
+        transaction.amount >= amountRange[0] &&
+        transaction.amount <= amountRange[1]
+      return matchesCategory && matchesText && matchesAmount
+    })
+    setFilteredTransactions(filtered)
+  }
+
   useEffect(() => {
-    if (filterCategory === '' && filterText === '' && amountRange[0] === min && amountRange[1] === max) {
-      setFilteredTransactions(transactions);
+    if (
+      filterCategory === "" &&
+      filterText === "" &&
+      amountRange[0] === min &&
+      amountRange[1] === max
+    ) {
+      setFilteredTransactions(transactions)
     } else {
-      handleFilterChange();
+      handleFilterChange()
     }
-  }, [filterCategory, filterText, amountRange, transactions]);
+  }, [filterCategory, filterText, amountRange, transactions])
 
   useEffect(() => {
     if (transactions.length) {
-      const amounts = transactions.map(t => t.amount);
-      const minAmount = Math.min(...amounts);
-      const maxAmount = Math.max(...amounts);
-      setMin(minAmount);
-      setMax(maxAmount);
-      setAmountRange([minAmount, maxAmount]);
-      setFilteredTransactions(transactions); // Set filtered transactions initially
+      const amounts = transactions.map((t) => t.amount)
+      const minAmount = Math.min(...amounts)
+      const maxAmount = Math.max(...amounts)
+      setMin(minAmount)
+      setMax(maxAmount)
+      setAmountRange([minAmount, maxAmount])
+      setFilteredTransactions(transactions) // Set filtered transactions initially
     }
-  }, [transactions]);
-  
+  }, [transactions])
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
@@ -259,7 +281,7 @@ useEffect(() => {
           onClick={() => setShowAddTransactionForm(true)}
           className="bg-green-800 px-5 py-3 rounded-3xl text-white hover:bg-green-700"
         >
-         Adicionar Transação
+          Adicionar Transação
         </button>
       </div>
 
@@ -335,7 +357,7 @@ useEffect(() => {
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                Data
+                  Data
                 </label>
                 <input
                   type="date"
@@ -371,7 +393,7 @@ useEffect(() => {
                 <div className="flex justify-between">
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Transferir para
+                      Transferir para
                     </label>
                     <select
                       name="transferTo"
@@ -389,7 +411,7 @@ useEffect(() => {
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Transferir de
+                      Transferir de
                     </label>
                     <select
                       name="transferFrom"
@@ -478,7 +500,7 @@ useEffect(() => {
                 <div className="flex justify-between">
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Data de término
+                      Data de término
                     </label>
                     <input
                       type="date"
@@ -490,7 +512,7 @@ useEffect(() => {
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Lembrar data
+                      Lembrar data
                     </label>
                     <input
                       type="date"
@@ -542,7 +564,7 @@ useEffect(() => {
             <div className="flex justify-between">
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                Tipo
+                  Tipo
                 </label>
                 <select
                   name="type"
@@ -594,7 +616,7 @@ useEffect(() => {
                 <div className="flex justify-between">
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Transferir para
+                      Transferir para
                     </label>
                     <select
                       name="transferTo"
@@ -612,7 +634,7 @@ useEffect(() => {
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Transferir de
+                      Transferir de
                     </label>
                     <select
                       name="transferFrom"
@@ -646,7 +668,7 @@ useEffect(() => {
             <div className="flex justify-between">
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                Quantia
+                  Quantia
                 </label>
                 <input
                   type="number"
@@ -658,7 +680,7 @@ useEffect(() => {
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">
-                Moeda
+                  Moeda
                 </label>
                 <select
                   name="currency"
@@ -673,7 +695,7 @@ useEffect(() => {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
-              Recorrência
+                Recorrência
               </label>
               <select
                 name="recurrence"
@@ -681,7 +703,6 @@ useEffect(() => {
                 onChange={handleChange}
                 className="px-3 py-2 border border-gray-300 rounded-md w-full"
               >
-                
                 <option value="never">Nunca</option>
                 <option value="oneD">Um dia</option>
                 <option value="twoD">Dois dias</option>
@@ -701,7 +722,7 @@ useEffect(() => {
                 <div className="flex justify-between">
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Data de término
+                      Data de término
                     </label>
                     <input
                       type="date"
@@ -713,7 +734,7 @@ useEffect(() => {
                   </div>
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">
-                    Lembrar data
+                      Lembrar data
                     </label>
                     <input
                       type="date"
@@ -762,7 +783,7 @@ useEffect(() => {
             className="bg-white p-6 rounded-lg shadow-lg z-50 w-full max-w-md"
           >
             <h3 className="mb-4 text-lg font-medium text-green-800">
-            Excluir transação
+              Excluir transação
             </h3>
             <p>Tem certeza de que deseja excluir esta transação?</p>
             <div className="flex justify-end space-x-4 mt-4">
@@ -842,6 +863,6 @@ useEffect(() => {
       ) : null}
     </div>
   )
-};
+}
 
-export default Transaction;
+export default Transaction

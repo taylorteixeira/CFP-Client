@@ -158,33 +158,33 @@ const Dashboard = () => {
         {/* Account Summary */}
         <div className="p-4 rounded-lg shadow-lg bg-green-100">
           <h3 className="text-xl font-semibold text-green-800 mb-2">
-          Resumo da conta
+            Resumo da conta
           </h3>
           <div className="flex justify-between mb-2">
             <p className="text-lg">Saldo total:</p>
-            <p className="text-lg font-bold text-green-600">${balance}</p>
+            <p className="text-lg font-bold">R$ {balance}</p>
           </div>
           <div className="flex justify-between mb-2">
             <p className="text-lg">Renda total:</p>
-            <p className="text-lg font-bold text-green-600">${income}</p>
+            <p className="text-lg font-bold text-green-600">R$ {income}</p>
           </div>
           <div className="flex justify-between mb-2">
             <p className="text-lg">Despesas totais:</p>
-            <p className="text-lg font-bold text-red-600">${expense}</p>
+            <p className="text-lg font-bold text-red-600">R$ {expense}</p>
           </div>
         </div>
 
         {/* Recent Transactions */}
         <div className="p-4 rounded-lg shadow-lg bg-green-100">
           <h3 className="text-xl font-semibold text-green-800 mb-2">
-          Transações recentes
+            Transações recentes
           </h3>
           <ul>
             {recentTransactions.map((transaction, index) => (
               <li key={index} className="mb-2">
                 <p>
                   {new Date(transaction.date).toDateString().slice(4)}:{" "}
-                  {transaction.description} - $
+                  {transaction.description} - R$
                   <span
                     className={
                       transaction.type === "expense"
@@ -194,7 +194,7 @@ const Dashboard = () => {
                   >
                     {transaction.amount}
                   </span>{" "}
-                  ({categoryLookup[transaction.category] || "Unknown Category"})
+                  ({categoryLookup[transaction.category] || "Dado Importado"})
                 </p>
               </li>
             ))}
@@ -204,7 +204,7 @@ const Dashboard = () => {
         {/* Spending Trends */}
         <div className="p-4 rounded-lg shadow-lg bg-green-100">
           <h3 className="text-xl font-semibold text-green-800 mb-2">
-          Tendências de gastos
+            Tendências de gastos
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={spendingTrends}>
@@ -218,7 +218,7 @@ const Dashboard = () => {
         {/* Expense Categories Pie Chart */}
         <div className="p-4 rounded-lg shadow-lg bg-green-100 col-span-1 md:col-span-2">
           <h3 className="text-xl font-semibold text-green-800 mb-2">
-          Categorias de despesas
+            Categorias de despesas
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -249,7 +249,7 @@ const Dashboard = () => {
         {/* Bar Chart for Income and Expense Comparison */}
         <div className="p-4 rounded-lg shadow-lg bg-green-100 col-span-1 md:col-span-2 lg:col-span-1">
           <h3 className="text-xl font-semibold text-green-800 mb-2">
-          Receita vs Despesas
+            Receita vs Despesas
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={spendingTrends}>

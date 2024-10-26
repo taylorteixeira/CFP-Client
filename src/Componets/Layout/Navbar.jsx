@@ -4,7 +4,8 @@ import { Link } from "react-router-dom"
 import { CgProfile } from "react-icons/cg"
 import { PiUserList } from "react-icons/pi"
 import { TbLogout } from "react-icons/tb"
-import { FaBell } from "react-icons/fa" // Importando o ícone de notificação
+import { FaBell } from 'react-icons/fa'; // Importando o ícone de notificação
+
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user)
@@ -13,6 +14,8 @@ const Navbar = () => {
     useState(false)
   const [notifications] = useState(0) // Exemplo com 3 notificações
   const dropdownRef = useRef(null)
+  const [greeting, setGreeting] = useState("") // Estado para saudação
+
   const notificationDropdownRef = useRef(null)
 
   const toggleDropdown = () => {
@@ -36,6 +39,14 @@ const Navbar = () => {
   }
 
   useEffect(() => {
+    // Função para definir a saudação
+    const getGreeting = () => {
+      const currentHour = new Date().getHours()
+      if (currentHour < 12) return "Bom dia"
+      if (currentHour < 18) return "Boa tarde"
+      return "Boa noite"
+    }
+    setGreeting(getGreeting())                                
     document.addEventListener("mousedown", handleClickOutside)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
@@ -78,7 +89,7 @@ const Navbar = () => {
                 to="/dashboard"
                 className="text-green-800 text-xl font-medium"
               >
-                Bem-vindo ao Controle de Finanças,
+                Bem Vindo ao Controle de Finanças
               </Link>
             </div>
           </>
@@ -93,7 +104,7 @@ const Navbar = () => {
                 className="flex items-center relative"
               >
                 <span className="text-green-800 text-xl mx-3 font-medium hidden sm:block">
-                  <i className="text-lg">@</i>
+                  {greeting}, <i className="text-lg">@</i>
                   {currentUser.user.username}
                 </span>
                 <PiUserList className="text-4xl flex-grow text-green-800 " />
@@ -166,6 +177,9 @@ const Navbar = () => {
                       <TbLogout className="text-2xl flex-grow" />
                       <span className="mx-auto flex-none w-3/4">Sair</span>
                     </Link>
+                    <p className="text-gray-400 text-xs text-center mt-2">
+                      V1.0.3
+                    </p>{" "}
                   </div>
                 </div>
               )}

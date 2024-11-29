@@ -7,7 +7,7 @@ export const Footer = () => {
         <div className="mb-4 md:mb-0">
           <div className="flex flex-col items-center">
             <Link to="/">
-              <h2 className="text-2xl font-bold text-green-800">CFP</h2>
+              <h2 className="text-2xl font-bold text-green-800">CFB</h2>
             </Link>
             <span className="text-gray-600 text-xs mt-1">
               <a

@@ -71,7 +71,7 @@ const ChatModal = ({ isOpen, onClose, isLoggedIn }) => {
         </div>
 
         {/* Content based on active tab */}
-        {/* {activeTab === "support" && (
+        {activeTab === "support" && (
           <div>
             <div className="h-40 overflow-y-auto border p-2 mb-2">
               <div className="text-sm text-gray-600">
@@ -97,7 +97,7 @@ const ChatModal = ({ isOpen, onClose, isLoggedIn }) => {
               {loading ? "Enviando..." : "Enviar"}
             </button>
           </div>
-        )} */}
+        )}
 
         {activeTab === "ia" && isLoggedIn && (
           <div>

@@ -1,17 +1,17 @@
-import HeroSection from './Herosection';
-import Features from './Features';
-import Testimonials from './Testimonials';
-import CallToAction from './CallToAction';
+import HeroSection from "./Herosection"
+import Features from "./Features"
+import Testimonials from "./Testimonials"
+import CallToAction from "./CallToAction"
 
 const Home = () => {
   return (
-    <div className='bg-white'>
+    <div className="bg-white">
       <HeroSection />
       <Features />
-      <Testimonials />
       <CallToAction />
+      <Testimonials />
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

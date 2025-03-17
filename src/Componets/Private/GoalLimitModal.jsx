@@ -15,6 +15,7 @@ import {
   Tooltip,
   Legend,
   Line,
+  LineChart,
 } from "recharts"
 
 const GoalLimit = () => {
@@ -148,49 +149,76 @@ const GoalLimit = () => {
   return (
     <>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
-        <div className="flex justify-between items-center mb-5">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-green-800">
+            Metas e Limites
+          </h2>
           {goalsLimits.length === 0 && (
             <button
               onClick={() => setShowAddGoalLimitForm(true)}
-              className="bg-green-800 px-5 py-3 rounded-3xl text-white hover:bg-green-700"
+              className="bg-green-700 px-4 py-2 rounded-md text-white hover:bg-green-600 transition-colors flex items-center gap-2 text-sm"
             >
-              Adicionar Meta e Limite
+              <span>+</span> Adicionar Meta e Limite
             </button>
           )}
         </div>
 
         {showAddGoalLimitForm && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div
               ref={formRef}
-              className="bg-white p-6 rounded-lg shadow-lg z-50 mx-auto w-96 max-w-md"
+              className="bg-white p-6 rounded-lg shadow-lg mx-auto w-96 max-w-md"
             >
-              <h3 className="mb-4 text-xl font-medium text-green-800">
+              <h3 className="mb-4 text-xl font-medium text-green-800 border-b border-green-100 pb-2">
                 Adicionar Meta e Limite
               </h3>
               <div className="flex flex-col space-y-4 mb-4">
-                <input
-                  type="number"
-                  id="goal"
-                  placeholder="Meta"
-                  value={formData.goal || ""}
-                  onChange={handleChange}
-                  className="px-3 py-2 border border-gray-300 rounded-md"
-                />
-                <input
-                  type="number"
-                  id="limit"
-                  placeholder="Limite"
-                  value={formData.limit || ""}
-                  onChange={handleChange}
-                  className="px-3 py-2 border border-gray-300 rounded-md"
-                />
-                <button
-                  onClick={handleAddGoalLimit}
-                  className="bg-green-800 px-5 py-3 rounded-3xl text-white hover:bg-green-700"
-                >
-                  Adicionar
-                </button>
+                <div>
+                  <label
+                    htmlFor="goal"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Meta (Ganhos)
+                  </label>
+                  <input
+                    type="number"
+                    id="goal"
+                    placeholder="Meta"
+                    value={formData.goal || ""}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="limit"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Limite (Gastos)
+                  </label>
+                  <input
+                    type="number"
+                    id="limit"
+                    placeholder="Limite"
+                    value={formData.limit || ""}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    onClick={() => setShowAddGoalLimitForm(false)}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleAddGoalLimit}
+                    className="bg-green-700 px-4 py-2 rounded-md text-white hover:bg-green-600"
+                  >
+                    Adicionar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -198,30 +226,29 @@ const GoalLimit = () => {
 
         {goalsLimits.length > 0 ? (
           <>
-            <span className="text-xl font-bold text-green-800 mb-4">
-              Metas e Limites
-            </span>
-            <div className="grid grid-cols-2 gap-4 mb-5">
-              <div className="bg-white p-4 rounded-lg shadow-lg">
-                <h3 className="text-lg font-bold text-green-800 mb-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="bg-white p-5 rounded-lg shadow-sm border border-green-100">
+                <h3 className="text-lg font-medium text-green-800 mb-4 border-b border-green-100 pb-2">
                   Metas (Ganhos)
                 </h3>
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col space-y-3">
                   {goalsLimits.map((goalLimit) => (
                     <div
                       key={goalLimit._id}
-                      className="flex justify-between items-center p-1 border-b-2 border-green-700 rounded-lg"
+                      className="flex justify-between items-center p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
                     >
-                      <span className="text-green-800 text-md font-medium">
-                        Meta: {goalLimit.goal}
-                      </span>
-                      <span className="text-gray-500 text-sm">
-                        Modificado:{" "}
-                        {moment(goalLimit.updatedAt).format("DD/MM/YYYY")}
-                      </span>
+                      <div>
+                        <span className="text-green-800 text-lg font-medium">
+                          R$ {goalLimit.goal}
+                        </span>
+                        <p className="text-gray-500 text-xs">
+                          Atualizado:{" "}
+                          {moment(goalLimit.updatedAt).format("DD/MM/YYYY")}
+                        </p>
+                      </div>
                       <button
                         onClick={() => handleEditButtonClick(goalLimit)}
-                        className="text-green-700 hover:text-green-600"
+                        className="text-green-700 hover:text-green-600 p-2 rounded-full hover:bg-green-200 transition-colors"
                       >
                         <MdEdit className="w-5 h-5" />
                       </button>
@@ -230,26 +257,28 @@ const GoalLimit = () => {
                 </div>
               </div>
 
-              <div className="bg-white p-4 rounded-lg shadow-lg">
-                <h3 className="text-lg font-bold text-green-800 mb-2">
+              <div className="bg-white p-5 rounded-lg shadow-sm border border-green-100">
+                <h3 className="text-lg font-medium text-green-800 mb-4 border-b border-green-100 pb-2">
                   Limites (Gastos)
                 </h3>
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col space-y-3">
                   {goalsLimits.map((goalLimit) => (
                     <div
                       key={goalLimit._id}
-                      className="flex justify-between items-center p-1 border-b-2 border-green-700 rounded-lg"
+                      className="flex justify-between items-center p-3 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
                     >
-                      <span className="text-green-800 text-md font-medium">
-                        Limite: {goalLimit.limit}
-                      </span>
-                      <span className="text-gray-500 text-sm">
-                        Modificado:{" "}
-                        {moment(goalLimit.updatedAt).format("DD/MM/YYYY")}
-                      </span>
+                      <div>
+                        <span className="text-red-800 text-lg font-medium">
+                          R$ {goalLimit.limit}
+                        </span>
+                        <p className="text-gray-500 text-xs">
+                          Atualizado:{" "}
+                          {moment(goalLimit.updatedAt).format("DD/MM/YYYY")}
+                        </p>
+                      </div>
                       <button
                         onClick={() => handleEditButtonClick(goalLimit)}
-                        className="text-green-700 hover:text-green-600"
+                        className="text-red-700 hover:text-red-600 p-2 rounded-full hover:bg-red-200 transition-colors"
                       >
                         <MdEdit className="w-5 h-5" />
                       </button>
@@ -259,78 +288,199 @@ const GoalLimit = () => {
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-xl font-bold text-green-800 mb-4">
-                Comparação de Metas e Transações
-              </h3>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="ganho" fill="#4caf50" />
-                  <Bar dataKey="despesa" fill="#f44336" />
-                  <Line
-                    type="monotone"
-                    dataKey="meta"
-                    stroke="#3b82f6"
-                    strokeWidth={3}
-                    dot={false}
-                    name="Meta"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="limite"
-                    stroke="#ff9800"
-                    strokeWidth={3}
-                    dot={false}
-                    name="Limite"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="grid grid-cols-1 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-green-100">
+                <h3 className="text-lg font-medium text-green-800 mb-4 border-b border-green-100 pb-2">
+                  Comparação de Metas e Transações
+                </h3>
+                <ResponsiveContainer width="100%" height={350}>
+                  <BarChart
+                    data={chartData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f1f1" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                    <YAxis axisLine={false} tickLine={false} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "white",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "0.375rem",
+                      }}
+                    />
+                    <Legend />
+                    <Bar
+                      dataKey="ganho"
+                      name="Ganhos"
+                      fill="#10b981"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="despesa"
+                      name="Despesas"
+                      fill="#ef4444"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="meta"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      dot={false}
+                      name="Meta"
+                      activeDot={{ r: 8 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="limite"
+                      stroke="#f59e0b"
+                      strokeWidth={2}
+                      dot={false}
+                      name="Limite"
+                      activeDot={{ r: 8 }}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-green-100">
+                <h3 className="text-lg font-medium text-green-800 mb-4 border-b border-green-100 pb-2">
+                  Progresso em Relação às Metas
+                </h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <LineChart
+                    data={chartData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f1f1" />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                    <YAxis axisLine={false} tickLine={false} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "white",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "0.375rem",
+                      }}
+                    />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="ganho"
+                      name="Ganhos Atuais"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                      dot={{ fill: "#10b981", r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="meta"
+                      name="Meta"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={{ fill: "#3b82f6", r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="despesa"
+                      name="Despesas Atuais"
+                      stroke="#ef4444"
+                      strokeWidth={2}
+                      dot={{ fill: "#ef4444", r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="limite"
+                      name="Limite"
+                      stroke="#f59e0b"
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={{ fill: "#f59e0b", r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </>
         ) : (
-          <p className="text-center text-gray-600">
-            Nenhuma meta ou limite encontrado.
-          </p>
+          <div className="bg-white p-10 rounded-lg shadow-sm border border-green-100 text-center">
+            <p className="text-gray-600 mb-4">
+              Nenhuma meta ou limite encontrado. Defina suas metas financeiras
+              para acompanhar seu progresso.
+            </p>
+            <button
+              onClick={() => setShowAddGoalLimitForm(true)}
+              className="bg-green-700 px-4 py-2 rounded-md text-white hover:bg-green-600 transition-colors"
+            >
+              Adicionar Meta e Limite
+            </button>
+          </div>
         )}
 
         {/* Formulário para editar Meta e Limite */}
         {showEditGoalLimitForm && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div
               ref={formRef}
-              className="bg-white p-6 rounded-lg shadow-lg z-50 w-full max-w-md"
+              className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md"
             >
-              <h3 className="mb-4 text-lg font-medium text-green-800">
+              <h3 className="mb-4 text-xl font-medium text-green-800 border-b border-green-100 pb-2">
                 Editar Meta e Limite
               </h3>
               <div className="flex flex-col space-y-4 mb-4">
-                <input
-                  type="number"
-                  id="goal"
-                  placeholder="Meta"
-                  value={formData.goal || ""}
-                  onChange={handleChange}
-                  className="px-3 py-2 border border-gray-300 rounded-md"
-                />
-                <input
-                  type="number"
-                  id="limit"
-                  placeholder="Limite"
-                  value={formData.limit || ""}
-                  onChange={handleChange}
-                  className="px-3 py-2 border border-gray-300 rounded-md"
-                />
-                <button
-                  onClick={handleEditGoalLimit}
-                  className="bg-green-800 px-5 py-3 rounded-3xl text-white hover:bg-green-700"
-                >
-                  Salvar
-                </button>
+                <div>
+                  <label
+                    htmlFor="goal"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Meta (Ganhos)
+                  </label>
+                  <input
+                    type="number"
+                    id="goal"
+                    placeholder="Meta"
+                    value={formData.goal || ""}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="limit"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Limite (Gastos)
+                  </label>
+                  <input
+                    type="number"
+                    id="limit"
+                    placeholder="Limite"
+                    value={formData.limit || ""}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    onClick={() => {
+                      setShowEditGoalLimitForm(false)
+                      setEditGoalLimitData(null)
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleEditGoalLimit}
+                    className="bg-green-700 px-4 py-2 rounded-md text-white hover:bg-green-600"
+                  >
+                    Salvar
+                  </button>
+                </div>
               </div>
             </div>
           </div>

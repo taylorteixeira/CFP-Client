@@ -55,7 +55,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={`${currentUser ? "bg-white" : "bg-green-200"} shadow-md py-4`}
+      className={`${currentUser ? "bg-white" : "bg-green-100"} shadow-md py-4`}
     >
       <div className="flex justify-between items-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Left Section */}

@@ -10,23 +10,83 @@ const ChatModal = ({ isOpen, onClose, isLoggedIn }) => {
 
   if (!isOpen) return null
 
+  const fetchUserData = async () => {
+    try {
+      const [transactionsRes, categoriesRes] = await Promise.all([
+        axios.get(`${string}/transaction/getTransaction`, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }),
+        axios.get(`${string}/category/getCategory`, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }),
+      ])
+
+      return {
+        transactions: transactionsRes.data.transactions,
+        categories: categoriesRes.data,
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error)
+      return { transactions: [], categories: [] }
+    }
+  }
+
   const handleSendMessage = async () => {
     if (activeTab === "ia" && isLoggedIn) {
       setLoading(true)
 
       try {
-        const response = await axios.post(`${string}/chat/send`, {
-          message,
-        })
+        // Busca dados do usuário
+        const userData = await fetchUserData()
+
+        // Prepara o contexto com os dados do usuário
+        const context = `
+          Dados do usuário:
+          - Transações: ${JSON.stringify(userData.transactions)}
+          - Categorias: ${JSON.stringify(userData.categories)}
+          
+          Pergunta do usuário: ${message}
+          
+          Por favor, analise os dados, faça os calculos se nessesario e responda de forma clara,simples e objetiva com no maximo 3 linhas e aviso que são dos ultimos 30 dias e hoje é dia ${new Date().toLocaleDateString("pt-BR")}.
+        `
+
+        // Faz a requisição para a API do Google Gemini
+        const response = await axios.post(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyB1jMMF_FMRJiWZKIb1CtuSqvI3gZMysRg",
+          {
+            contents: [
+              {
+                parts: [{ text: context }],
+              },
+            ],
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
 
         // Atualiza o histórico de mensagens
         setChatHistory([
           ...chatHistory,
-          { user: message, ai: response.data.response },
+          {
+            user: message,
+            ai: response.data.candidates[0].content.parts[0].text,
+          },
         ])
         setMessage("")
       } catch (error) {
-        console.error("Error sending message:", error)
+        console.error("Erro ao enviar mensagem:", error)
+        setChatHistory([
+          ...chatHistory,
+          {
+            user: message,
+            ai: "Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.",
+          },
+        ])
       } finally {
         setLoading(false)
       }

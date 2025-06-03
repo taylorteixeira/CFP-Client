@@ -78,9 +78,8 @@ const SignUp = () => {
                     onChange={handleChange}
                 />
                 <button onClick={handleSubmit}                    
-                    className='bg-green-800 text-white p-3 rounded-lg text-2xl font-bold hover:opacity-90 disabled:opacity-80 my-2'
+                    className='bg-green-800 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-green-700 transition-colors shadow-md hover:shadow-lg'
                     >
-                    
 Inscrever-se
                 </button>
                 <span className='text-center text-green-800 text-sm font-medium'>OR</span>

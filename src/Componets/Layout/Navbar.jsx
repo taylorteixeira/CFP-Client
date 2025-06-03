@@ -62,7 +62,7 @@ const Navbar = () => {
         <div></div>
         {currentUser ? null : (
           <>
-            <div className="flex flex-col items-center">
+            <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
               <Link to="/">
                 <h2 className="text-2xl font-bold text-green-800">
                   Controle de Finanças
@@ -185,18 +185,18 @@ const Navbar = () => {
               )}
             </>
           ) : (
-            <>
+            <div className="flex items-center space-x-4">
               <Link to="/signup">
-                <div className="bg-green-800 px-5 py-3 rounded-3xl text-white mx-2 hover:bg-green-700">
-                  <button className="text-lg">Inscrever</button>
+                <div className="bg-green-800 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-green-700 transition-colors shadow-md hover:shadow-lg">
+                  <button className="text-lg">Cadastrar</button>
                 </div>
               </Link>
               <Link to="/signin">
-                <div className="bg-green-800 px-5 py-3 rounded-3xl text-white mx-2 hover:bg-green-700">
-                  <button className="text-lg">Login</button>
+                <div className="bg-white text-green-700 border border-green-700 px-12 py-3 rounded-lg text-lg font-medium hover:bg-green-50 transition-colors">
+                  <button className="text-lg">Logar</button>
                 </div>
               </Link>
-            </>
+            </div>
           )}
         </div>
       </div>

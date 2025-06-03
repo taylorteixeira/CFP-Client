@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { BiSolidCategory } from "react-icons/bi"
 import { MdDashboard, MdMenu, MdClose } from "react-icons/md"
-import { FaExchangeAlt } from "react-icons/fa"
+import { FaExchangeAlt, FaCamera } from "react-icons/fa"
 import { AiOutlineInfoCircle } from "react-icons/ai" // Ícone de "i" para o FAQ
 import { MdOutlineAddTask } from "react-icons/md" // Ícone para adicionar metas e limites
 import TransactionModal from "../Private/TransactionModal" // Import the TransactionModal
@@ -86,6 +86,17 @@ const Sidebar = () => {
               <MdOutlineAddTask className="text-2xl" />
               <span className={`${isMinimized ? "hidden" : "block"}`}>
                 Metas e Limites
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="https://facecut-suggestion.vercel.app/"
+              className="flex items-center space-x-2 text-white hover:bg-green-600 px-6 py-3 rounded-lg transition-all duration-300"
+            >
+              <FaCamera className="text-2xl" />
+              <span className={`${isMinimized ? "hidden" : "block"}`}>
+                Facecut
               </span>
             </Link>
           </li>
